@@ -19,7 +19,7 @@ st.title("TRADUCTOR.")
 st.subheader("Escucho lo que quieres traducir.")
 
 
-image = Image.open('OIG7.jpg')
+image = Image.open('Global Citizen.jpg')
 
 st.image(image,width=300)
 with st.sidebar:
@@ -79,7 +79,7 @@ if result:
     text = str(result.get("GET_TEXT"))
     in_lang = st.selectbox(
         "Selecciona el lenguaje de Entrada",
-        ("Inglés", "Español", "Bengali", "Coreano", "Mandarín", "Japonés"),
+        ("Inglés", "Español", "Bengali", "Coreano", "Mandarín", "Japonés", "Francés", "Alemán"),
     )
     if in_lang == "Inglés":
         input_language = "en"
@@ -93,10 +93,14 @@ if result:
         input_language = "zh-cn"
     elif in_lang == "Japonés":
         input_language = "ja"
+    elif in_lang == "Francés":
+        input_language = "fr"
+    elif in_lang == "Alemán":
+        input_language = "De"
     
     out_lang = st.selectbox(
         "Selecciona el lenguaje de salida",
-        ("Inglés", "Español", "Bengali", "Coreano", "Mandarín", "Japonés"),
+        ("Inglés", "Español", "Bengali", "Coreano", "Mandarín", "Japonés", "Francés", "Alemán"),
     )
     if out_lang == "Inglés":
         output_language = "en"
@@ -110,6 +114,10 @@ if result:
         output_language = "zh-cn"
     elif out_lang == "Japonés":
         output_language = "ja"
+    elif in_lang == "Francés":
+        input_language = "fr"
+    elif in_lang == "Alemán":
+        input_language = "De"
     
     english_accent = st.selectbox(
         "Selecciona el acento",
