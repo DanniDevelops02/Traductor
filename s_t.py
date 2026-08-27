@@ -31,30 +31,32 @@ with st.sidebar:
 
 st.write("Toca el Botón y habla lo que quires traducir")
 
-stt_button = Button(label=" Escuchar  🎤", width=300,  height=50)
+stt_button = Button(label=" Escuchar 🎤", width=300, height=50)
 
 stt_button.js_on_event("button_click", CustomJS(code="""
-    var recognition = new webkitSpeechRecognition();
-    recognition.continuous = false;  // Cambia a false
-    recognition.interimResults = true;
-    recognition.lang = 'es-ES';  // Puedes ajustar el idioma
- 
-    recognition.onresult = function (e) {
-        var value = "";
-        for (var i = e.resultIndex; i < e.results.length; ++i) {
-            if (e.results[i].isFinal) {
-                value += e.results[i][0].transcript;
-            }
-        }
-        if ( value != "") {
-            document.dispatchEvent(new CustomEvent("GET_TEXT", {detail: value}));
-        }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Tu navegador no soporta Speech Recognition. Usa Google Chrome o Edge.");
+        return;
     }
-    
-    recognition.onend = function() {
-        console.log("Reconocimiento detenido");
-    }
-    
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = function(e) {
+        let transcript = e.results[0][0].transcript;
+        if (transcript.trim() !== "") {
+            document.dispatchEvent(new CustomEvent("GET_TEXT", {detail: transcript}));
+        }
+    };
+
+    recognition.onerror = function(e) {
+        console.error("Error en reconocimiento de voz:", e.error);
+        alert("Error en el micrófono: " + e.error);
+    };
+
     recognition.start();
 """))
 
